@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <map>
+#include <numeric>
 #include <set>
 #include <string>
 #include <utility>
@@ -80,14 +81,15 @@ public:
     }
 
 
-    template <typename KeyMapper>
-    vector<Document> FindTopDocuments(const string& raw_query, KeyMapper key_mapper) const {
+    template <typename SearchKey>
+    vector<Document> FindTopDocuments(const string& raw_query, SearchKey search_key) const {
         const Query query = ParseQuery(raw_query);
-        auto matched_documents = FindAllDocuments(query, key_mapper);
+        auto matched_documents = FindAllDocuments(query, search_key);
 
+        const double almost_zero = 1e-6;
         sort(matched_documents.begin(), matched_documents.end(),
-            [](const Document& lhs, const Document& rhs) {
-                if (abs(lhs.relevance - rhs.relevance) < 1e-6) {
+            [almost_zero](const Document& lhs, const Document& rhs) {
+                if (abs(lhs.relevance - rhs.relevance) < almost_zero) {
                     return lhs.rating > rhs.rating;
                 }
                 else {
@@ -102,8 +104,9 @@ public:
     }
 
     vector<Document> FindTopDocuments(const string& raw_query, DocumentStatus status) const {
-        return FindTopDocuments(raw_query, [status](int document_id, DocumentStatus status_compare, int rating)
-            {return (status_compare == status); });
+        return FindTopDocuments(raw_query, [status](int document_id, DocumentStatus status_compare, int rating) {
+            return (status_compare == status);
+            });
     }
 
     vector<Document> FindTopDocuments(const string& raw_query) const {
@@ -166,10 +169,9 @@ private:
         if (ratings.empty()) {
             return 0;
         }
-        int rating_sum = 0;
-        for (const int rating : ratings) {
-            rating_sum += rating;
-        }
+
+        int rating_sum = accumulate(ratings.begin(), ratings.end(), 0);
+
         return rating_sum / static_cast<int>(ratings.size());
     }
 
@@ -219,8 +221,8 @@ private:
         return log(GetDocumentCount() * 1.0 / word_to_document_freqs_.at(word).size());
     }
 
-    template <typename KeyMapper>
-    vector<Document> FindAllDocuments(const Query& query, KeyMapper key_mapper) const {
+    template <typename SearchKey>
+    vector<Document> FindAllDocuments(const Query& query, SearchKey search_key) const {
         map<int, double> document_to_relevance;
         for (const string& word : query.plus_words) {
             if (word_to_document_freqs_.count(word) == 0) {
@@ -228,8 +230,9 @@ private:
             }
             const double inverse_document_freq = ComputeWordInverseDocumentFreq(word);
             for (const auto [document_id, term_freq] : word_to_document_freqs_.at(word)) {
-                if (key_mapper(document_id, documents_.at(document_id).status,
-                    documents_.at(document_id).rating)) {
+                const auto& document_data = documents_.at(document_id);
+                if (search_key(document_id, document_data.status,
+                    document_data.rating)) {
                     document_to_relevance[document_id] += term_freq * inverse_document_freq;
                 }
             }
