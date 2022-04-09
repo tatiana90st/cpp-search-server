@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const double almost_zero = 1e-6;
+const double ALMOST_ZERO = 1e-6;
 const int MAX_RESULT_DOCUMENT_COUNT = 5;
 
 string ReadLine() {
@@ -89,7 +89,7 @@ public:
 
         sort(matched_documents.begin(), matched_documents.end(),
             [](const Document& lhs, const Document& rhs) {
-                if (abs(lhs.relevance - rhs.relevance) < almost_zero) {
+                if (abs(lhs.relevance - rhs.relevance) < ALMOST_ZERO) {
                     return lhs.rating > rhs.rating;
                 }
                 else {
@@ -106,7 +106,7 @@ public:
     vector<Document> FindTopDocuments(const string& raw_query, DocumentStatus status) const {
         return FindTopDocuments(raw_query, [status](int document_id, DocumentStatus status_compare, int rating) {
             return status_compare == status;
-        });
+            });
     }
 
     vector<Document> FindTopDocuments(const string& raw_query) const {
