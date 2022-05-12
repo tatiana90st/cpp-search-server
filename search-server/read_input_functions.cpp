@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <tuple>
 
+/*
 void PrintDocument(const Document& document) {
     std::cout << "{ "
         << "document_id = " << document.id << ", "
@@ -21,7 +22,7 @@ void PrintMatchDocumentResult(int document_id, const std::vector<std::string>& w
     }
     std::cout << "}" << std::endl;
 }
-
+*/
 void AddDocument(SearchServer& search_server, int document_id, const std::string& document, DocumentStatus status,
     const std::vector<int>& ratings) {
     try {

@@ -2,11 +2,14 @@
 #include "request_queue.h"
 #include "document.h"
 #include "paginator.h"
+#include "read_input_functions.h"
+#include "read_strings.h"
 #include <iostream>
 
 using  std::string_literals::operator ""s;
 
 int main() {
+
     SearchServer search_server("and at in"s);
     RequestQueue request_queue(search_server);
 
@@ -28,4 +31,6 @@ int main() {
     request_queue.AddFindRequest("sparrow");
     std::cout << "Total empty requests: " << request_queue.GetNoResultRequests() << std::endl;
     return 0;
+
+
 }

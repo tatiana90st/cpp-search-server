@@ -65,7 +65,7 @@
                 break;
             }
         }
-        return make_tuple(matched_words, documents_.at(document_id).status);
+        return { matched_words, documents_.at(document_id).status };
     }
 
     bool SearchServer::IsValidWord(const std::string& word) {
