@@ -48,9 +48,10 @@ void FindTopDocuments(const SearchServer& search_server, const std::string& raw_
 void MatchDocuments(const SearchServer& search_server, const std::string& query) {
     try {
         std::cout << "Матчинг документов по запросу: " << query << std::endl;
-        const int document_count = search_server.GetDocumentCount();
-        for (int index = 0; index < document_count; ++index) {
-            const int document_id = search_server.GetDocumentId(index);
+        //const int document_count = search_server.GetDocumentCount();
+        //for (int index = 0; index < document_count; ++index) {
+           // const int document_id = search_server.GetDocumentId(index);
+        for (const int document_id : search_server){
             std::tuple<std::vector<std::string>, DocumentStatus> result = search_server.MatchDocument(query, document_id);
             PrintMatchDocumentResult(document_id, std::get<0>(result), std::get<1>(result));
         }
