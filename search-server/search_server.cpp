@@ -76,8 +76,6 @@ std::tuple<std::vector<std::string>, DocumentStatus> SearchServer::MatchDocument
 }
 
 void SearchServer::RemoveDocument(int document_id) {
-    //std::cout << "Before " << documents_.size() << " " << word_to_document_freqs_.size()
-            // << " " << document_ids_.size() << " " << document_to_word_freqs_.size() << std::endl;
     documents_.erase(document_id);
     document_to_word_freqs_.erase(document_id);
 
@@ -107,8 +105,6 @@ void SearchServer::RemoveDocument(int document_id) {
     if (iter != document_ids_.end()) {
         document_ids_.erase(iter);
     }
-    //std::cout << "After " << documents_.size() << " " << word_to_document_freqs_.size()
-       // << " " << document_ids_.size() << " " << document_to_word_freqs_.size() << std::endl;
 }
 
 bool SearchServer::IsValidWord(const std::string& word) {
