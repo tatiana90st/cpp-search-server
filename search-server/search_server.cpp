@@ -1,4 +1,4 @@
-#include "search_server.h"
+п»ї#include "search_server.h"
 #include "document.h"
 #include "log_duration.h"
 #include <stdexcept>
@@ -23,11 +23,11 @@ SearchServer::SearchServer(const std::string& stop_words)
 
 void SearchServer::AddDocument(int document_id, const std::string_view& document, DocumentStatus status, const std::vector<int>& ratings) {
     if (document_id < 0) {
-        throw std::invalid_argument("ID не должно быть отрицательным"s);
+        throw std::invalid_argument("ID РЅРµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј"s);
     }
 
     if (documents_.count(document_id) > 0) {
-        throw std::invalid_argument("Документ с таким ID уже добавлен"s);
+        throw std::invalid_argument("Р”РѕРєСѓРјРµРЅС‚ СЃ С‚Р°РєРёРј ID СѓР¶Рµ РґРѕР±Р°РІР»РµРЅ"s);
     }
     documents_.emplace(document_id, DocumentData{ ComputeAverageRating(ratings), status, std::string(document) });
     std::vector<std::string_view> words = SplitIntoWordsNoStop(documents_.at(document_id).text);
@@ -180,7 +180,7 @@ bool SearchServer::IsStopWord(const std::string_view& word) const {
 std::vector<std::string_view> SearchServer::SplitIntoWordsNoStop(const std::string_view& text) const {
     std::vector<std::string_view> words_not_checked = SplitIntoWordsView(text);
     if (any_of(words_not_checked.begin(), words_not_checked.end(), [](const std::string_view& word) { return !IsValidWord(static_cast<std::string>(word)); })) {
-        throw std::invalid_argument("Недопустимые символы в стоп-словах");
+        throw std::invalid_argument("РќРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹ РІ СЃР»РѕРІРµ");
     }
     std::vector<std::string_view> words(words_not_checked.size());
     auto it = copy_if(words_not_checked.begin(), words_not_checked.end(), words.begin(),
@@ -200,7 +200,7 @@ int SearchServer::ComputeAverageRating(const std::vector<int>& ratings) {
 
 SearchServer::QueryWord SearchServer::ParseQueryWord(std::string_view text) const {
     if (text.empty()) {
-        throw std::invalid_argument("Ошибка в тексте запроса"s);
+        throw std::invalid_argument("РўРµРєСЃС‚ РґРѕРєСѓРјРµРЅС‚Р° РЅРµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј"s);
     }
     bool is_minus = false;
     if (text[0] == '-') {
@@ -208,12 +208,12 @@ SearchServer::QueryWord SearchServer::ParseQueryWord(std::string_view text) cons
         text = text.substr(1);
     }
     if (text.empty() || text[0] == '-' || !IsValidWord(text)) {
-        throw std::invalid_argument("Ошибка в тексте запроса"s);
+        throw std::invalid_argument("РћС€РёР±РєР° РІ С‚РµРєСЃС‚Рµ РґРѕРєСѓРјРµРЅС‚Р°"s);
     }
     return QueryWord{ text, is_minus, IsStopWord(text) };
 }
 
-SearchServer::Query SearchServer::ParseQuery(const std::string_view& text) const { //разбор запроса
+SearchServer::Query SearchServer::ParseQuery(const std::string_view& text) const { //Г°Г Г§ГЎГ®Г° Г§Г ГЇГ°Г®Г±Г 
     Query query;
     std::vector<std::string_view> s;
     s = SplitIntoWordsView(text);

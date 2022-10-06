@@ -1,4 +1,4 @@
-#include "document.h"
+ï»¿#include "document.h"
 #include "search_server.h"
 #include <iostream>
 #include <stdexcept>
@@ -10,32 +10,32 @@ void AddDocument(SearchServer& search_server, int document_id, const std::string
         search_server.AddDocument(document_id, document, status, ratings);
     }
     catch (const std::exception& e) {
-        std::cout << "Îøèáêà äîáàâëåíèÿ äîêóìåíòà " << document_id << ": " << e.what() << std::endl;
+        std::cout << "ÐžÑˆÐ¸Ð±ÐºÐ° Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð´Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ð° " << document_id << ": " << e.what() << std::endl;
     }
 }
 
 void FindTopDocuments(const SearchServer& search_server, const std::string& raw_query) {
-    std::cout << "Ðåçóëüòàòû ïîèñêà ïî çàïðîñó: " << raw_query << std::endl;
+    std::cout << "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹ Ð¿Ð¾Ð¸ÑÐºÐ° Ð¿Ð¾ Ð·Ð°Ð¿Ñ€Ð¾ÑÑƒ: " << raw_query << std::endl;
     try {
         for (const Document& document : search_server.FindTopDocuments(raw_query)) {
             PrintDocument(document);
         }
     }
     catch (const std::exception& e) {
-        std::cout << "Îøèáêà ïîèñêà: " << e.what() << std::endl;
+        std::cout << "ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ð¾Ð¸ÑÐºÐ°: " << e.what() << std::endl;
     }
 }
 
 void MatchDocuments(const SearchServer& search_server, const std::string& query) {
     try {
-        std::cout << "Ìàò÷èíã äîêóìåíòîâ ïî çàïðîñó: " << query << std::endl;
+        std::cout << "ÐœÐ°Ñ‚Ñ‡Ð¸Ð½Ð³ Ð´Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ð¿Ð¾ Ð·Ð°Ð¿Ñ€Ð¾ÑÑƒ: " << query << std::endl;
         for (const int document_id : search_server) {
             std::tuple<std::vector<std::string_view>, DocumentStatus> result = search_server.MatchDocument(query, document_id);
             PrintMatchDocumentResult(document_id, std::get<0>(result), std::get<1>(result));
         }
     }
     catch (const std::exception& e) {
-        std::cout << "Îøèáêà ìàò÷èíãà äîêóìåíòîâ íà çàïðîñ " << query << ": " << e.what() << std::endl;
+        std::cout << "ÐžÑˆÐ¸Ð±ÐºÐ° Ð¼Ð°Ñ‚Ñ‡Ð¸Ð½Ð³Ð° Ð´Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ð½Ð° Ð·Ð°Ð¿Ñ€Ð¾Ñ " << query << ": " << e.what() << std::endl;
     }
 }
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "search_server.h"
 #include "document.h"
 #include <vector>

@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "string_processing.h"
 #include "document.h"
 #include "concurrent_map.h"
@@ -17,16 +17,16 @@ const double ALMOST_IRRELEVANT = 1e-6;
 
 class SearchServer {
 public:
-
+    
     template <typename StringContainer>
     explicit SearchServer(const StringContainer& stop_words)
         : stop_words_(MakeUniqueNonEmptyStrings(stop_words))
     {
         if (std::any_of(stop_words_.begin(), stop_words_.end(), [](const std::string_view& word) { return !IsValidWord(word); })) {
-            throw std::invalid_argument("Недопустимые символы в стоп-словах");
+            throw std::invalid_argument("РћС€РёР±РєР° РІ СЃС‚РѕРї-СЃР»РѕРІР°С…");
         }
     }
-
+    
     explicit SearchServer(const std::string& stop_words);
 
     explicit SearchServer(const std::string_view& stop_words_text);
@@ -153,12 +153,12 @@ std::vector<Document> SearchServer::FindAllDocuments(ExPol& policy, Query& query
 
     ConcurrentMap <int, double> pre_document_to_relevance(100);
     std::for_each(policy, query.plus_words.begin(), query.plus_words.end(),
-        [&document_predicate, &pre_document_to_relevance, this] (const std::string_view& word){
+        [&document_predicate, &pre_document_to_relevance, this](const std::string_view& word) {
             if (word_to_document_freqs_.count(word) != 0) {
                 const double inverse_document_freq = ComputeWordInverseDocumentFreq(word);
 
                 std::for_each(word_to_document_freqs_.at(word).begin(), word_to_document_freqs_.at(word).end(),
-                    [&document_predicate, &pre_document_to_relevance, inverse_document_freq, this] (const std::pair<int, double>& p) {
+                    [&document_predicate, &pre_document_to_relevance, inverse_document_freq, this](const std::pair<int, double>& p) {
                         const auto& document_data = documents_.at(p.first);
                         if (document_predicate(p.first, document_data.status, document_data.rating)) {
                             pre_document_to_relevance[p.first].ref_to_value += p.second * inverse_document_freq;
@@ -167,7 +167,7 @@ std::vector<Document> SearchServer::FindAllDocuments(ExPol& policy, Query& query
             }});
 
     std::for_each(policy, query.minus_words.begin(), query.minus_words.end(),
-        [this, &pre_document_to_relevance] (const std::string_view& word) {
+        [this, &pre_document_to_relevance](const std::string_view& word) {
             if (word_to_document_freqs_.count(word) != 0) {
                 for (const auto [document_id, _] : word_to_document_freqs_.at(word)) {
                     pre_document_to_relevance.Erase(document_id);

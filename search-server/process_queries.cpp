@@ -1,12 +1,11 @@
-#include "document.h"
+п»ї#include "document.h"
 #include "search_server.h"
 #include <vector>
 #include <algorithm>
 #include <execution>
 #include <iterator>
 #include <list>
-//Достаточно применить функцию transform, 
-//которая запишет результат в вектор, заранее созданный с нужной длиной.
+
 
 using namespace std;
 

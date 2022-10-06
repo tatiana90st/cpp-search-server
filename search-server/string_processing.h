@@ -3,7 +3,8 @@
 #include <set>
 #include <string>
 #include <string_view>
-#include<map>
+
+
 
 std::vector<std::string> SplitIntoWords(const std::string& text);
 
@@ -12,11 +13,10 @@ std::set<std::string, std::less<>> MakeUniqueNonEmptyStrings(const StringContain
     std::set<std::string, std::less<>> non_empty_strings;
     for (const std::string_view str : strings) {
         if (!str.empty()) {
-            non_empty_strings.insert(static_cast<std::string>(str));
+            non_empty_strings.insert(std::string(str));
         }
     }
     return non_empty_strings;
 }
 
-std::vector<std::string_view> SplitIntoWordsView(const std::string_view str1);
-
+std::vector<std::string_view> SplitIntoWordsView(std::string_view str);
